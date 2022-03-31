@@ -7,7 +7,7 @@ FROM registry.litium.cloud/runtime/litium:net6-latest AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
-
+#KOMMENTAR AV MIG TEST TILL GIT
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Src/Litium.Accelerator.Mvc/Litium.Accelerator.Mvc.csproj", "Src/Litium.Accelerator.Mvc/"]
