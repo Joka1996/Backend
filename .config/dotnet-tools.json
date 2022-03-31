@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "litium.application.migrations": {
+      "version": "8.2.3",
+      "commands": [
+        "litium-db"
+      ]
+    }
+  }
+}

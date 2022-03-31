@@ -1,0 +1,13 @@
+{
+  "name": "litium-administartion",
+  "sideEffects": false,
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "description": "Litium Administration Node Services",
+  "homepage": "https://docs.litium.com",
+  "repository": {},
+  "scripts": {},
+  "dependencies": {
+    "puppeteer": "^8.0.0"
+  }
+}

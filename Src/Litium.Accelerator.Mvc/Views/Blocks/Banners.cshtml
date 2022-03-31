@@ -1,0 +1,28 @@
+﻿@model Litium.Accelerator.ViewModels.Block.BannersBlockViewModel
+@{
+    var hasBanner = Model.Banners != null && Model.Banners.Any();
+    var LargeColumn = hasBanner ? 12 / Math.Min(Model.Banners.Count, 4) : 12;
+}
+
+@if (hasBanner)
+{
+    <div class="row">
+        @foreach (var banner in Model.Banners)
+        {
+            <div class="columns small-12 large-@LargeColumn @(LargeColumn == 12 ? "single-banner" : "multiple-banner")">
+                <div class="teaser">
+                    <a href="@banner.LinkUrl" class="banner-block__image-link">
+                        @Html.ImageFor(x => banner.Image, maxSize: LargeColumn == 12 ? new Size(1314, -1) : new Size(786, -1), htmlAttributes: new { @class = "banner-block__image" })
+                    </a>
+                    <div class="banner-text">
+                        <h3 class="banner-text__title">@banner.LinkText</h3>
+                        @if (!String.IsNullOrWhiteSpace(banner.ActionText))
+                        {
+                            <span class="banner-text__button">@banner.ActionText</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net6.0</TargetFrameworks>
+  </PropertyGroup>
+  <ItemGroup>
+    <LitiumLocalization Include="Resources\Administration*.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="dist\*.js" />
+    <EmbeddedResource Include="dist\*.js.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Litium.Accelerator\Litium.Accelerator.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Litium.Web.Administration.Application" Version="8.2.3" />
+  </ItemGroup>
+</Project>
