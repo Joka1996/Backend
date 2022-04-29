@@ -24,6 +24,13 @@ namespace Litium.Accelerator.GraphQL.Types.Carts
 
             Field(x => x.UnitPrice)
                 .Description("The unit price.");
+            Field(x => x.Image, nullable: true)
+                .Description("Image");
+            Field(x => x.Size, nullable: true)
+                .Description("Size");
+            Field(x => x.Color, nullable: true)
+                .Description("Color");
+            
 
             Interface<PriceInterfaceType>();
         }
