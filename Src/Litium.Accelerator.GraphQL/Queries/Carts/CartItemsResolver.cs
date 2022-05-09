@@ -7,6 +7,7 @@ using Litium.Products;
 using Litium.Runtime.AutoMapper;
 using Litium.Runtime.DependencyInjection;
 using Litium.Sales;
+using Litium.Web;
 using Litium.Web.GraphQL;
 using Litium.Web.Models;
 using System;
@@ -24,17 +25,20 @@ namespace Litium.Accelerator.GraphQL.Queries.Carts
         private readonly CurrencyService _currencyService;
         private readonly VariantService _variantService;
         private readonly FieldDefinitionService _fieldDefinitionService;
+        private readonly UrlService _urlService;
 
         public CartItemsResolver(
             CartContextAccessor cartContextAccessor,
             CurrencyService currencyService,
             VariantService variantService,
-            FieldDefinitionService fieldDefinitionService)
+            FieldDefinitionService fieldDefinitionService,
+            UrlService urlService)
         {
             _cartContextAccessor = cartContextAccessor;
             _currencyService = currencyService;
             _variantService = variantService;
             _fieldDefinitionService = fieldDefinitionService;
+            _urlService = urlService;
         }
 
         public Task<IEnumerable<CartItemModel>> ResolveAsync(IResolveFieldContext context)
@@ -46,6 +50,8 @@ namespace Litium.Accelerator.GraphQL.Queries.Carts
                 var currency = _currencyService.Get(salesOrder.CurrencyCode);
                 model = salesOrder.Rows.Select(x =>
                     {
+                        var variant = _variantService.Get(x.ArticleNumber);
+                        var url = _urlService.GetUrl(variant, new ProductUrlArgs(salesOrder.ChannelSystemId.Value));
                         return new CartItemModel
                         {
                             ArticleNumber = x.ArticleNumber,
@@ -59,9 +65,11 @@ namespace Litium.Accelerator.GraphQL.Queries.Carts
                             UnitPrice = x.UnitPriceIncludingVat,
                             VatAmount = x.TotalVat,
                             VatRate = x.VatRate,
-                            Image = _variantService.Get(x.ArticleNumber).Fields.GetValue<IList<Guid>>("_images")?.First().MapTo<ImageModel>()?.GetUrlToImage(new System.Drawing.Size(), new System.Drawing.Size())?.Url ?? "",
-                            Color = GetTranslation(_fieldDefinitionService.Get<ProductArea>("Color"), _variantService.Get(x.ArticleNumber).Fields.GetValue<string>("Color")),
-                            Size = GetTranslation(_fieldDefinitionService.Get<ProductArea>("Size"), _variantService.Get(x.ArticleNumber).Fields.GetValue<string>("Size"))
+                            //Lagt till koden nedanför
+                            Image = variant.Fields.GetValue<IList<Guid>>("_images")?.First().MapTo<ImageModel>()?.GetUrlToImage(new System.Drawing.Size(), new System.Drawing.Size())?.Url ?? "",
+                            Color = GetTranslation(_fieldDefinitionService.Get<ProductArea>("Color"), variant.Fields.GetValue<string>("Color")),
+                            Size = GetTranslation(_fieldDefinitionService.Get<ProductArea>("Size"), variant.Fields.GetValue<string>("Size")),
+                            Url = url
                         };
                     })
                     .ToList();
